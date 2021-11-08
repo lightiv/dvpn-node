@@ -134,12 +134,17 @@ func StartCmd() *cobra.Command {
 				WithSimulateAndExecute(config.Chain.SimulateAndExecute).
 				WithTxConfig(encoding.TxConfig)
 
+			for {
 			account, err := client.QueryAccount(info.GetAddress())
 			if err != nil {
-				return err
+			    return err
 			}
 			if account == nil {
-				return fmt.Errorf("account does not exist with address %s", client.FromAddress())
+			    log.Error("account does not exist with address %s", client.FromAddress())
+			    time.Sleep(30*time.Second)
+			    continue
+			}
+			break
 			}
 
 			log.Info("Fetching GeoIP location info...")
